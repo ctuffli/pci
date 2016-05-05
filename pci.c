@@ -44,8 +44,8 @@ static struct pci_op {
 	pci_fcn_t	fcn;
 	const char	*usage;
 } ops[] = {
-	{"devlist", devlist, "       pci devlist\n"},
-	{"tree",    devtree, "       pci tree\n"},
+	{"devlist", devlist, "       pci devlist [--libxo <args>] [-n]\n"},
+	{"tree",    devtree, "       pci tree [--libxo <args>] [-n]\n"},
 	{NULL, NULL, NULL}
 };
 
