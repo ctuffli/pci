@@ -27,17 +27,19 @@ APP = pci
 SRCS = \
 	pci.c \
 	pci_devlist.c \
-	pci_tree.c
+	pci_tree.c \
+	pci_reg.c
 
 OBJS=   $(addsuffix .o,$(basename $(SRCS)))
 
 CDEFS = -DHAVE_CONFIG_H
 COPTS = -g -Wall -Werror
-CINCS = -I/usr/local/include -I/usr/include/sys
+CINCS = -I/usr/include -I/usr/local/include -I/usr/include/sys
 CFLAGS = $(CDEFS) $(CINCS) $(COPTS)
 
 LDFLAGS=-L/usr/local/lib
 LDLIBS=-lxo -lpciaccess
+#LDLIBS=-lxo /home/ctuffli/dev/libpciaccess/libpciaccess-0.13.4/src/.libs/libpciaccess.a
 
 all : $(APP)
 

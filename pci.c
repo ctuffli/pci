@@ -36,6 +36,8 @@
 
 extern void devlist(int argc, char *argv[]);
 extern void devtree(int argc, char *argv[]);
+extern void get_set(int argc, char *argv[]);
+extern void reg_list(int argc, char *argv[]);
 
 typedef void (*pci_fcn_t)(int argc, char *argv[]);
 
@@ -46,10 +48,13 @@ static struct pci_op {
 } ops[] = {
 	{"devlist", devlist, "       pci devlist [--libxo <args>] [-n]\n"},
 	{"tree",    devtree, "       pci tree [--libxo <args>] [-n]\n"},
+	{"set",     get_set, "       pci set -s <selector>\n"},
+	{"get",     get_set, "       pci get -s <selector>\n"},
+	{"reg",     reg_list,"       pci reg\n"},
 	{NULL, NULL, NULL}
 };
 
-static void
+void
 usage(void)
 {
 	struct pci_op *p = NULL;

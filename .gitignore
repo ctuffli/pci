@@ -1,3 +1,4 @@
+pci
 *.o
 .*.sw?
 cscope*
