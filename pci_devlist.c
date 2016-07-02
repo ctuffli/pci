@@ -34,8 +34,11 @@ extern void create_db(void);
 extern void destroy_db(void);
 extern int lookup_db(uint16_t vid, uint16_t did, char **vname, char **dname);
 
+extern struct pci_slot_match *parse_selector(const char *s);
+
 static struct option opts[] = {
 	{ "number", no_argument, NULL, 'n'},
+	{ "selector", required_argument, NULL, 's'},
 	{ NULL, 0, NULL, 0 }
 };
 
@@ -44,22 +47,36 @@ devlist(int argc, char *argv[])
 {
 	struct pci_device_iterator *iter = NULL;
 	struct pci_device *pdev = NULL;
+	struct pci_slot_match *pmatch = NULL;
 	int ch, verbose = 1;
+	const char *sel_str = NULL;
 
-	while ((ch = getopt_long(argc, argv, "n", opts, NULL)) != -1) {
+	while ((ch = getopt_long(argc, argv, "ns:", opts, NULL)) != -1) {
 		switch (ch) {
 		case 'n':
 			verbose = 0;
+			break;
+		case 's':
+			sel_str = optarg;
 			break;
 		default:
 			return;
 		}
 	}
 
+	if (sel_str != NULL) {
+		pmatch = parse_selector(sel_str);
+#if 0
+		if (pmatch)
+			printf("Trying to match %04x:%02x:%02x.%x\n",
+					pmatch->domain, pmatch->bus, pmatch->dev, pmatch->func);
+#endif
+	}
+
 	if (verbose)
 		create_db();
 
-	iter = pci_slot_match_iterator_create(NULL);
+	iter = pci_slot_match_iterator_create(pmatch);
 
 	xo_open_list("device");
 

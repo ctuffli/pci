@@ -53,7 +53,7 @@ static struct option opts[] = {
  * Use 'x' or '*' to wildcard a selector value. E.g.
  *    "5:x" matches all devices on bus 5
  */
-static struct pci_slot_match *
+struct pci_slot_match *
 parse_selector(const char *s)
 {
 	struct pci_slot_match *pmatch = NULL;
