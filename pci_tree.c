@@ -29,9 +29,7 @@
 #include <pciaccess.h>
 #include <sys/queue.h>
 
-extern void create_db(void);
-extern void destroy_db(void);
-extern int lookup_db(uint16_t vid, uint16_t did, char **vname, char **dname);
+extern const char *pci_device_get_class_name( const struct pci_device * );
 
 static struct option opts[] = {
 	{ "number", no_argument, NULL, 'n'},
@@ -77,9 +75,6 @@ devtree(int argc, char *argv[])
 			return;
 		}
 	}
-
-	if (verbose)
-		create_db();
 
 	iter = pci_slot_match_iterator_create(NULL);
 
@@ -133,9 +128,6 @@ devtree(int argc, char *argv[])
 	xo_close_container("domain");
 
 	free_bus_list(&buses);
-
-	if (verbose)
-		destroy_db();
 }
 
 static struct bus_s *
@@ -212,11 +204,13 @@ print_bus_tree(struct bus_s *b, uint32_t depth, int verbose)
 					pdev->vendor_id, pdev->device_id,
 					pdev->subvendor_id, pdev->subdevice_id);
 		} else {
-			char *vname = NULL, *dname = NULL;
+			const char *cname = NULL, *vname = NULL, *dname = NULL;
 
-			lookup_db(pdev->vendor_id, pdev->device_id, &vname, &dname);
+			cname = pci_device_get_class_name(pdev);
+			vname = pci_device_get_vendor_name(pdev);
+			dname = pci_device_get_device_name(pdev);
 
-			xo_emit("{k:vendorname} {k:devname}\n", vname, dname);
+			xo_emit("{k:classname} {k:vendorname} {k:devname}\n", cname, vname, dname);
 		}
 
 		const struct pci_bridge_info *binfo = NULL;

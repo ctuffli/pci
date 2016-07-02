@@ -30,10 +30,6 @@
 
 extern const char *pci_device_get_class_name( const struct pci_device * );
 
-extern void create_db(void);
-extern void destroy_db(void);
-extern int lookup_db(uint16_t vid, uint16_t did, char **vname, char **dname);
-
 extern struct pci_slot_match *parse_selector(const char *s);
 
 static struct option opts[] = {
@@ -73,9 +69,6 @@ devlist(int argc, char *argv[])
 #endif
 	}
 
-	if (verbose)
-		create_db();
-
 	iter = pci_slot_match_iterator_create(pmatch);
 
 	xo_open_list("device");
@@ -85,12 +78,11 @@ devlist(int argc, char *argv[])
 		xo_emit("{k:bdf/%04x:%02x:%02x.%u} ",
 				pdev->domain, pdev->bus, pdev->dev, pdev->func);
 		if (verbose) {
-			const char *cname = NULL;
-			char *vname = NULL, *dname = NULL;
+			const char *cname = NULL, *vname = NULL, *dname = NULL;
 
 			cname = pci_device_get_class_name(pdev);
-
-			lookup_db(pdev->vendor_id, pdev->device_id, &vname, &dname);
+			vname = pci_device_get_vendor_name(pdev);
+			dname = pci_device_get_device_name(pdev);
 
 			xo_emit("{k:classname}: {k:vendorname} {k:devname}\n", cname, vname, dname);
 		} else {
@@ -104,7 +96,4 @@ devlist(int argc, char *argv[])
 	}
 
 	xo_close_list("device");
-
-	if (verbose)
-		destroy_db();
 }
