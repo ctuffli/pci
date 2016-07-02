@@ -28,6 +28,8 @@
 #include <libxo/xo.h>
 #include <pciaccess.h>
 
+extern const char *pci_device_get_class_name( const struct pci_device * );
+
 extern void create_db(void);
 extern void destroy_db(void);
 extern int lookup_db(uint16_t vid, uint16_t did, char **vname, char **dname);
@@ -65,16 +67,20 @@ devlist(int argc, char *argv[])
 		xo_open_instance("device");
 		xo_emit("{k:bdf/%04x:%02x:%02x.%u} ",
 				pdev->domain, pdev->bus, pdev->dev, pdev->func);
-		if (!verbose) {
-			xo_emit("{k:vendorid/%04x}:{k:deviceid/%04x} {k:subvendorid/%04x}:{k:subdeviceid/%04x}\n",
-					pdev->vendor_id, pdev->device_id,
-					pdev->subvendor_id, pdev->subdevice_id);
-		} else {
+		if (verbose) {
+			const char *cname = NULL;
 			char *vname = NULL, *dname = NULL;
+
+			cname = pci_device_get_class_name(pdev);
 
 			lookup_db(pdev->vendor_id, pdev->device_id, &vname, &dname);
 
-			xo_emit("{k:vendorname} {k:devname}\n", vname, dname);
+			xo_emit("{k:classname}: {k:vendorname} {k:devname}\n", cname, vname, dname);
+		} else {
+			xo_emit("{k:vendorid/%04x}:{k:deviceid/%04x} {k:subvendorid/%04x}:{k:subdeviceid/%04x} {k:class/%06x}\n",
+					pdev->vendor_id, pdev->device_id,
+					pdev->subvendor_id, pdev->subdevice_id,
+					pdev->device_class);
 		}
 
 		xo_close_instance("device");

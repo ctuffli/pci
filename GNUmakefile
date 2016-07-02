@@ -28,7 +28,8 @@ SRCS = \
 	pci.c \
 	pci_devlist.c \
 	pci_tree.c \
-	pci_reg.c
+	pci_reg.c \
+	pci_class.c
 
 OBJS=   $(addsuffix .o,$(basename $(SRCS)))
 
