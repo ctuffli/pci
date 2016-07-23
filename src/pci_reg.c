@@ -36,7 +36,6 @@
 #define MAX_STACK	4
 
 extern void usage(void);
-extern int isdigit(int);
 
 static struct option opts[] = {
 	{ "selector", required_argument, NULL, 's'},
