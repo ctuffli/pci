@@ -1,0 +1,116 @@
+.Dd Nov 6, 2016
+.Dt PCI 8
+.Os
+.SH NAME
+.Nm pci
+.Nd diagnostic utility for the PCI bus
+
+.Sh SYNOPSIS
+.Nm
+.Aq Ar command
+.Op options
+.Nm
+.Ic devlist
+.Op Fl -libxo
+.Op Fl n
+.Op Fl s Ar selector
+.br
+.Nm
+.Ic tree
+.Op Fl -libxo
+.Op Fl n
+.br
+.Nm
+.Ic set
+.Aq Fl s Ar selector
+.Aq Ar register
+.Aq Ar value
+.br
+.Nm
+.Ic get
+.Aq Fl s Ar selector
+.Aq Ar register
+.br
+.Nm
+.Ic reg
+.br
+
+.Sh DESCRIPTION
+.Nm
+is a utility for displaying information about PCI devices in the system as well as reading and writting device registers.
+
+By default, it shows a brief list of devices.
+
+The following commands are available:
+.Bl -tag -width indent
+.It Ic devlist
+List all PCI devices. Device description includes the domain:bus:device.function number, class description, vendor and device name.
+.Ic devlist
+has several optional arguments
+.Bl -tag -width
+.It Fl -libxo
+Use
+.Xr libxo 3
+for output formatting.
+.It Fl n
+Output PCI vendor and device codes as numbers instead of looking them up in the PCI ID database.
+.It Fl s Ar selector
+Show only devices matching the
+.Ic selector
+.El
+.It Ic tree
+List all PCI devices relative to their position in the PCI heirarchy.
+.Ic devlist
+has several optional arguments
+.Bl -tag -width
+.It Fl -libxo
+Use
+.Xr libxo 3
+for output formatting.
+.It Fl n
+Output PCI vendor and device codes as numbers instead of looking them up in the PCI ID database.
+.El
+.It Ic set
+Write the given PCI register with the provided value. Specify registers either by offset or symbolic name. Use
+.Nm
+.Ic reg
+to list the recognized names.
+.Bl -tag -width
+.It Fl s Ar selector
+Show only devices matching the
+.Ic selector
+.El
+.It Ic get
+Read the configuration register. Specify registers either by offset or symbolic name. Use
+.Nm
+.Ic reg
+to list the recognized names.
+.Bl -tag -width
+.It Fl s Ar selector
+Show only devices matching the
+.Ic selector
+.El
+.It Ic reg
+List the available register names.
+.El
+.Pp
+For commands using
+.Fl -libxo
+.Bl -tag -width
+.It Fl -libxo
+Generate output via
+.Xr libxo 3
+in a selection of different human and machine readable formats.
+See
+.Xr xo_parse_args 3
+for details on command line arguments.
+.Sh SEE ALSO
+.Xr libxo 3
+.Pp
+The
+.Qq libpciaccess
+library available at
+.Dl https://cgit.freedesktop.org/xorg/lib/libpciaccess/
+.Sh AUTHOR
+.An Chuck Tuffli Aq Mt chuck@tuffli.net
+
