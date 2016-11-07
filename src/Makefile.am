@@ -5,9 +5,10 @@
 # Copyright file. By downloading, installing, copying, or otherwise
 # using the SOFTWARE, you agree to be bound by the terms of that
 # LICENSE.
-AM_CFLAGS = -Wall -Werror
+AM_CFLAGS = -Wall -Werror -I$(includedir)
 
-AM_LDFLAGS = -lxo -lpciaccess
+AM_LDFLAGS = -L$(libdir)
+pci_LDADD = -lxo -lpciaccess
 
 bin_PROGRAMS = pci
 

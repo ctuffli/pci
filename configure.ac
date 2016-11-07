@@ -13,7 +13,6 @@ AC_INIT([pci], [0.5])
 AM_INIT_AUTOMAKE
 AC_OUTPUT(Makefile src/Makefile)
 AC_CONFIG_SRCDIR([src/pci_reg_name.h])
-AC_CONFIG_HEADERS([config.h])
 
 # Checks for programs.
 AC_PROG_CC

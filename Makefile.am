@@ -7,3 +7,6 @@
 # LICENSE.
 AUTOMAKE_OPTIONS = foreign
 SUBDIRS = src
+
+man_MANS = doc/pci.8
+
